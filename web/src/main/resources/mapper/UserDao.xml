@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="iflyer.dao.UserDao">
+	<!-- list -->
+	<resultMap id="listMap" type="iflyer.model.User">
+		<result column="id" property="id"></result>
+		<result column="name" property="name"></result>
+		<result column="age" property="age"></result>
+	</resultMap>
+
+	<insert id="save" parameterType="iflyer.model.User">
+		<selectKey keyProperty="id" resultType="String" order="BEFORE">
+			select  replace(uuid(),'-','')   from dual
+		</selectKey>
+		insert into t_user(id,name,age) values(#{id},#{name,jdbcType=VARCHAR},#{age,jdbcType=INTEGER})
+	</insert>
+
+	<select id="selectById" resultType="iflyer.model.User">
+		select * from t_user where id = #{id,jdbcType=NUMERIC}
+	</select>
+
+	<update id="updateById" parameterType="iflyer.model.User">
+		update t_user set
+		username = #{name,jdbcType=VARCHAR} ,
+		age = #{age,jdbcType=NUMERIC}
+		where id = #{id,jdbcType=NUMERIC}
+	</update>
+
+	<delete id="deleteById">
+		delete from t_user where id = #{id,jdbcType=NUMERIC}
+	</delete>
+
+	<select id="queryAll" resultType="iflyer.model.User">
+		select * from t_user
+	</select>
+
+
+</mapper>

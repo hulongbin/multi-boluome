@@ -1,11 +1,14 @@
 package iflyer.dao;
 
 import iflyer.model.User;
+import org.apache.ibatis.annotations.Insert;
+import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
+import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Component;
+
+import java.util.List;
 
 /**
  * Created by liuxin on 17/1/20.
@@ -15,19 +18,30 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class UserDao {
-    @Autowired
-    MongoTemplate mongoTemplate;
+	@Autowired
+	private SqlSessionTemplate sqlSessionTemplate;
+	//@Insert("insert into t_user(username,age) values(#{userName,jdbcType=VARCHAR},#{age,jdbcType=INTEGER})")
+	public User save(User user) {
+		this.sqlSessionTemplate.insert("save", user);
+		return user;
+	}
 
-    public User getUser(String name) {
-        User user = mongoTemplate.findOne(new Query(Criteria.where("name").is(name)), User.class);
-        if (user == null) {
-            user = new User("不存在该用户", "xx");
-        }
-        return user;
-    }
+	//@Select("select * from t_user where id = #{id,jdbcType=INTEGER}")
+	public User selectById(Integer id) {
+		return this.sqlSessionTemplate.selectOne("selectById", id);
+	}
 
-    public User saveUser(String name,String age){
-        mongoTemplate.save(new User(name,age));
-        return mongoTemplate.findOne(new Query(Criteria.where("name").is(name)), User.class);
-    }
+//	int updateById(User user);
+//
+//	int deleteById(Integer id);
+//
+	public List<User> queryAll() {
+		List<User> queryAll = this.sqlSessionTemplate.selectList("queryAll");
+		return queryAll;
+	}
+
 }
+
+
+
+

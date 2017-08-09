@@ -1,18 +1,38 @@
 package iflyer.model;
 
-import org.springframework.data.mongodb.core.mapping.Document;
+
+import java.io.Serializable;
 
 /**
  * Created by liuxin on 17/1/20.
  */
-@Document(collection = "User")
-public class User {
+public class User implements Serializable {
+
+    private String id;
+
     private String name;
     private String age;
+    private String password;
 
-    public User(String name, String age) {
-        this.name = name;
-        this.age = age;
+//    public User(String name, String age) {
+//        this.name = name;
+//        this.age = age;
+//    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -29,5 +49,15 @@ public class User {
 
     public void setAge(String age) {
         this.age = age;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id='" + id + '\'' +
+                ", name='" + name + '\'' +
+                ", age='" + age + '\'' +
+                ", password='" + password + '\'' +
+                '}';
     }
 }
